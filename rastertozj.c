@@ -177,7 +177,7 @@ void ShutDown()
 		outputCommand(cashDrawerEject[0]);
 	if ( settings.cashDrawer2==2 )
 		outputCommand(cashDrawerEject[1]);
-	switch (settings.pageCutType)
+	switch (settings.docCutType)
     {
         case 1:
             outputCommand(pageCutCommand);
