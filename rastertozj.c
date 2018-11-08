@@ -20,6 +20,8 @@ struct settings_
 	int cashDrawer2;
 	int blankSpace;
 	int feedDist;
+
+    int docCutType;
 };
 struct settings_ settings;
 
@@ -43,7 +45,16 @@ static const struct command rasterModeStartCommand =
 {4,(char[4]){0x1d,0x76,0x30,0}};
 
 static const struct command pageCutCommand =
-{4, (char[4]){29,'V','A',20}};
+    {4, (char[4]){29, 'V', 'A', 20}};
+
+static const struct command partialCutCommand =
+    {4, (char[4]){29, 'V', 'B', 20}};
+
+static const struct command noFeedPageCutCommand =
+    {4, (char[4]){29, 'V', '0', 20}};
+
+static const struct command noFeedPartialCutCommand =
+    {4, (char[4]){29, 'V', '1', 20}};
 
 #ifdef DEBUGP
 FILE* lfd = 0;
@@ -140,10 +151,11 @@ inline void initializeSettings(char * commandLineOptionSettings)
 
 	memset(&settings, 0x00, sizeof(struct settings_));
 
+    settings.docCutType = getOptionChoiceIndex("DocCutType", ppd);
 	settings.cashDrawer1  = getOptionChoiceIndex("CashDrawer1Setting", ppd);
 	settings.cashDrawer2  = getOptionChoiceIndex("CashDrawer2Setting", ppd);
-	settings.blankSpace   = getOptionChoiceIndex("BlankSpace"        , ppd);
-	settings.feedDist     = getOptionChoiceIndex("FeedDist"          , ppd);
+	settings.blankSpace   = getOptionChoiceIndex("BlankSpace", ppd);
+	settings.feedDist     = getOptionChoiceIndex("FeedDist", ppd);
 
 	ppdClose(ppd);
 }
@@ -165,7 +177,21 @@ void ShutDown()
 		outputCommand(cashDrawerEject[0]);
 	if ( settings.cashDrawer2==2 )
 		outputCommand(cashDrawerEject[1]);
-	outputCommand(pageCutCommand);
+	switch (settings.pageCutType)
+    {
+        case 1:
+            outputCommand(pageCutCommand);
+            break;
+        case 2:
+            outputCommand(partialCutCommand);
+            break;
+        case 3:
+            outputCommand(noFeedPageCutCommand);
+            break;
+        case 4:
+            outputCommand(noFeedPartialCutCommand);
+            break;
+    }
 	outputCommand(printerInitializeCommand);
 }
 

@@ -69,6 +69,16 @@
 *ParamCustomPageSize Orientation:  5 int 0 0
 
 *OpenGroup: CutGroup/Cut Options
+*OpenUI *DocCutType/Document Cut Type: PickOne
+*DefaultDocCutType: 1CutDoc
+*DocCutType 0NoCutDoc/No Cut: ""
+*DocCutType 1CutDoc/Full Cut: ""
+*DocCutType 2PartialCutDoc/Partial Cut: ""
+*DocCutType 3NoFeedCutDoc/No Feed Full Cut: ""
+*DocCutType 4NoFeedPartialCutDoc/No Feed Partial Cut: ""
+*CloseUI: *DocCutType
+
+
 *OpenUI *FeedDist/Feed distance after print: PickOne
 *DefaultFeedDist: 4feed15mm
 *FeedDist 0feed3mm/feed 3mm: ""
